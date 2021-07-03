@@ -8,4 +8,5 @@
     i)Task Delay .
     ii)Software Timers (Two modes , ONE_SHOT or CIRCULAR ) .
  #### *5 - mutex and Semaphores .* <br>
-    
+ 
+ ![Example](https://github.com/AhmedAzazy-EZ/AVR-Multi-Tasking-OS/blob/main/Example/Screenshot_1.png)
