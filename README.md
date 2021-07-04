@@ -1,4 +1,4 @@
-# AVR Multi-Tasking OS 
+# AVR MultiTasking OS 
 #### *This is a Simple Multi-tasking OS that runs on AVR 8-bit microcontrollers. This repo also contains an example that uses 10 Threads and 4 software Timers and one mutex to contol the access to an LCD* <br>
  ## - this OS has many features :<br>
  #### *1 - allows you to create as many as threads you want unless the memory size allows .* <br>
