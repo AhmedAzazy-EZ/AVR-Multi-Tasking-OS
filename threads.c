@@ -16,7 +16,7 @@ item_t * pRunning;
 void ThreadCreate(taskFunc_t funcPtr , TaskTCB_t * TCB , stack_t stackptr , uint8_t priority )
 	{
 		
-		TCB->stackPtr = ((uint16_t) stackptr) + 99;
+		TCB->stackPtr = ((uint16_t) stackptr) + (STACK_SIZE - 1);
 		
 		TCB->priority = priority;
 		
