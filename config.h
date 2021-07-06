@@ -12,7 +12,7 @@
 #define PRIORITY_NUM 10
 #define INCLUDE_SOFTWARETIMER 1
 #define NUM_OF_CALL_TIMERS	4
-
+#define STACK_SIZE		90
 
 
 #endif /* CONFIG_H_ */

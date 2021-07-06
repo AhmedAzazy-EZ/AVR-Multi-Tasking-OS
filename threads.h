@@ -16,7 +16,7 @@ typedef struct TaskTCB TaskTCB_t;
 *			Typedefs
 ***********************************/
 typedef void (*taskFunc_t)(void );
-typedef uint8_t stack_t[100];
+typedef uint8_t stack_t[STACK_SIZE];
 typedef struct item item_t;
 typedef struct list list_t;
 
