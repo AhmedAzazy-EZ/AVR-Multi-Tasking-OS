@@ -21,6 +21,7 @@ void timer0Init(uint8_t ms )
 	 */
 	TCCR0 &=~(0xFF);
 	TCCR0|= 0xD; 
+	
 	uint16_t TimerClk = (F_CPU) / 1024;
 	
 	//
@@ -29,10 +30,12 @@ void timer0Init(uint8_t ms )
 	//if greater than 31 , then set it to maximum
 	//******************************
 	// 
-	if(ms <= 31 )
+	
+	uint8_t maxTicks = 255 / (TimerClk / 1000);
+	if(ms <= maxTicks )
 	OCR0 = ms*(TimerClk / 1000);
 	else 
-	OCR0 = 31;
+	OCR0 = maxTicks;
 	
 	//
 	//Enable clear timer on capture match interrupt
@@ -88,13 +91,11 @@ ISR(TIMER0_COMP_vect ,  ISR_NAKED)
 	
 	asm("call refreshTimerList");
 	
+	#if INCLUDE_SOFTWARETIMER == 1
 
-   #if INCLUDE_SOFTWARETIMER == 1
-   asm("cli");
-	asm("call runSoftwareTimers");
+	runSoftwareTimers();
+
 	#endif
-
-
 	//;;current Context has been stored;;
 	//;
 	//;
@@ -143,10 +144,6 @@ ISR(TIMER0_COMP_vect ,  ISR_NAKED)
 	asm("pop r2");
 	asm("pop r1");
 	asm("pop r0");
-	//clear Interrupt enable pin
-	//it will be automaticaaly enable at the RETI instr
-	asm("ldi r16 , 0x7F");
-	asm("AND r0 , 16");
 	asm("out 0x3f , r0");
 	asm("pop r0");
 	asm("reti");
