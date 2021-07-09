@@ -20,7 +20,7 @@ void timer0Init(uint8_t ms )
 	 *clear timer on comapre match
 	 */
 	TCCR0 &=~(0xFF);
-	TCCR0|= 0xD; 
+	TCCR0|= 0x0F; 
 	
 	uint16_t TimerClk = (F_CPU) / 1024;
 	
