@@ -26,8 +26,8 @@ void timer0Init(uint8_t ms )
 	
 	//
 	//*************set wait time********
-	//if less than 31 ms , then acceptable 
-	//if greater than 31 , then set it to maximum
+	//if less than maxTicks ms , then acceptable 
+	//if greater than maxTicks , then set it to maximum
 	//******************************
 	// 
 	
