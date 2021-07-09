@@ -63,10 +63,10 @@ uint8_t wait = 0;
 
 
 void ledToggle(void )
-	{
-		PORTA^=(1<<4);
-	}
-	
+{
+	PORTA^=(1<<4);
+}
+
 void ledToggle2(void )
 {
 	PORTA^=(1<<5);
@@ -85,7 +85,6 @@ void ledToggle4(void )
 int main(void)
 {
    DDRA = 0xFF; 
-   LCD_Init();
    //
    //osInit() take an unsigned integer the number of miliseconds 
    //to call the OS scheduler , In this example 1ms 
@@ -94,6 +93,7 @@ int main(void)
    //
    //create a mutex that allows only one task can access the shared Resource (LCD)
    //
+   LCD_Init();
    mutexCreate(&mutex1 , 1); 
    ThreadCreate(task1func , &task1TCB , task1Stack , 1 );
    ThreadCreate(task2func , &task2TCB , task2Stack , 1);
@@ -105,11 +105,13 @@ int main(void)
    ThreadCreate(task8func , &task8TCB , task8Stack , 1 );
    ThreadCreate(task9func , &task9TCB , task9Stack , 1);
    ThreadCreate(task10func , &task10TCB , task10Stack , 1);
+   #if INCLUDE_SOFTWARETIMER == 1
+   CreateSoftwareTimer(ledToggle , 2000 , CIRCULAR );
+   CreateSoftwareTimer(ledToggle2, 2000, CIRCULAR );
+   CreateSoftwareTimer(ledToggle3 , 2000 , CIRCULAR);
+   CreateSoftwareTimer(ledToggle4 , 2000 , CIRCULAR );
    
-   CreateSoftwareTimer(ledToggle , 500 , CIRCULAR );
-   CreateSoftwareTimer(ledToggle2, 500, CIRCULAR );
-   CreateSoftwareTimer(ledToggle3 , 500 , CIRCULAR);
-   CreateSoftwareTimer(ledToggle4 , 500 , CIRCULAR );
+   #endif
    
    startScheduler();
     while (1) 
@@ -122,16 +124,13 @@ void task1func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(i = 0 ; i < LOOP; i++);
-		flag++;
-		if(flag%10 == 0)
-		{
-				if(mutexTake(&mutex1 , 5000) == PASS)
-				{
-					LCD_String("****Thread1*****");
-					mutexRelease(&mutex1);
-				}
-		}
+		for(uint32_t k = 0 ; k < LOOP; k++);
+			if(mutexTake(&mutex1 , 5000) == PASS)
+			{
+				LCD_String("****Thread1*****");
+				mutexRelease(&mutex1);
+				asm("call scheduler");
+			}
 		//taskAddToReady(&task2TCB);			
 		}
 
@@ -143,18 +142,12 @@ void task2func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(j = 0 ; j < LOOP ; j++);
-		flag++;
-		/*
-		 *Task2 delete itself every 10 Toggels
-		 */
-		if(flag%10 == 0)
-		{
-				if(mutexTake(&mutex1 , 5000) == PASS)
-				{
-					LCD_String("****Thread2*****");
-					mutexRelease(&mutex1);
-				}
+		for(uint32_t k= 0 ; k < LOOP ; k++);
+			if(mutexTake(&mutex1 , 5000) == PASS)
+			{
+				LCD_String("****Thread2*****");
+				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
 
 			//taskAddToReady(&task2TCB);
@@ -167,16 +160,12 @@ void task3func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
+		for(uint32_t k = 0 ; k < LOOP; k++);
+			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
-				if(mutexTake(&mutex1 , 5000) == PASS)
-				{
 				LCD_String("****Thread3*****");
 				mutexRelease(&mutex1);
-				}
+				asm("call scheduler");
 			}
 			//taskAddToReady(&task2TCB);
 		}
@@ -187,17 +176,14 @@ void task4func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
-		{
+		for(uint32_t k = 0 ; k < LOOP; k++);
 			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
 				LCD_String("****Thread4*****");
 				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
-		}
+
 		//taskAddToReady(&task2TCB);
 	}
 }
@@ -207,17 +193,13 @@ void task5func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
-		{
+		for(uint32_t k = 0 ; k < LOOP; k++);
 			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
 				LCD_String("****Thread5*****");
 				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
-		}
 		//taskAddToReady(&task2TCB);
 	}
 }
@@ -227,17 +209,13 @@ void task6func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
-		{
+		for(uint32_t k = 0 ; k < LOOP; k++);
 			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
 				LCD_String("****Thread6*****");
 				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
-		}
 		//taskAddToReady(&task2TCB);
 	}
 }
@@ -247,17 +225,13 @@ void task7func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
-		{
+		for(uint32_t k = 0 ; k < LOOP; k++);
 			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
 				LCD_String("****Thread7*****");
 				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
-		}
 		//taskAddToReady(&task2TCB);
 	}
 }
@@ -267,17 +241,13 @@ void task8func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
-		{
+		for(uint32_t k = 0 ; k < LOOP; k++);
 			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
 				LCD_String("****Thread8*****");
 				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
-		}
 		//taskAddToReady(&task2TCB);
 	}
 }
@@ -287,17 +257,13 @@ void task9func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
-		{
+		for(uint32_t k = 0 ; k < LOOP; k++);
 			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
 				LCD_String("****Thread9*****");
 				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
-		}
 		//taskAddToReady(&task2TCB);
 	}
 }
@@ -307,17 +273,13 @@ void task10func(void )
 	uint8_t flag = 0;
 	while(1)
 	{
-		for(k = 0 ; k < LOOP; k++);
-		flag++;
-		
-		if(flag%10 == 0)
-		{
+		for(uint32_t k = 0 ; k < LOOP; k++);
 			if(mutexTake(&mutex1 , 5000) == PASS)
 			{
 				LCD_String("****Thread10****");
 				mutexRelease(&mutex1);
+				asm("call scheduler");
 			}
-		}
 		//taskAddToReady(&task2TCB);
 	}
 }

@@ -51,10 +51,13 @@ timerHandle_t CreateSoftwareTimer(timerCallBack_t callback , uint64_t delay , ti
 }
 
 
- void runSoftwareTimers(void )
+void runSoftwareTimers(void )
 	{
-		asm("mov r1 , 0");
-		for(volatile uint8_t  i = 0x0; i < NUM_OF_CALL_TIMERS ; i++)
+
+		asm("ldi r16 , 0");
+		asm("mov r1 , r16");
+
+		for(uint8_t i = 0; i < NUM_OF_CALL_TIMERS ; i++)
 			{
 				if((timers.repetition[i] == IDLE) ||(timers.repetition[i] == NOT_SET))
 					continue ;

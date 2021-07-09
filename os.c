@@ -20,18 +20,18 @@ void idleTask(void )
 {
 	while(1)
 	{
-		for(idletest = 0 ; idletest < LOOP ; idletest++);
-			PORTA^=(1<<4);
 	}
 }
 
 void osInit(uint8_t ms )
 {
 	OS_listInit();
-	ThreadCreate(idleTask , &idleTCB , idleStack , PRIORITY_NUM - 1);
-	readyList[PRIORITY_NUM - 1].numOfItems = 0;
+	ThreadCreate(idleTask , &idleTCB , idleStack , 4);
+	readyList[4].numOfItems = 0;
 	pRunning = &idleTCB.TCB_Item;
+	#if INCLUDE_SOFTWARETIMER == 1
 	softwareTimers_Init();
+	#endif
 	timerListInit();
 	timer0Init(ms);
 }

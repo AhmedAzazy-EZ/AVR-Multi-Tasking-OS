@@ -30,7 +30,6 @@ void timer0Init(uint8_t ms )
 	//******************************
 	// 
 	if(ms <= 31 )
-	//OCR0 = 2;
 	OCR0 = ms*(TimerClk / 1000);
 	else 
 	OCR0 = 31;
@@ -89,11 +88,13 @@ ISR(TIMER0_COMP_vect ,  ISR_NAKED)
 	
 	asm("call refreshTimerList");
 	
-	#if INCLUDE_SOFTWARETIMER == 1
 
-	runSoftwareTimers();
-
+   #if INCLUDE_SOFTWARETIMER == 1
+   asm("cli");
+	asm("call runSoftwareTimers");
 	#endif
+
+
 	//;;current Context has been stored;;
 	//;
 	//;
@@ -142,6 +143,10 @@ ISR(TIMER0_COMP_vect ,  ISR_NAKED)
 	asm("pop r2");
 	asm("pop r1");
 	asm("pop r0");
+	//clear Interrupt enable pin
+	//it will be automaticaaly enable at the RETI instr
+	asm("ldi r16 , 0x7F");
+	asm("AND r0 , 16");
 	asm("out 0x3f , r0");
 	asm("pop r0");
 	asm("reti");

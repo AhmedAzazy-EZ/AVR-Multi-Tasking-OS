@@ -23,7 +23,7 @@ extern timer_ControlBlock_t timers;
 #endif
 
 
-#define LOOP 50
+#define LOOP	100000
 
 /**************************************************
  *				Externs
