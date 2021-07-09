@@ -26,7 +26,7 @@ void idleTask(void )
 void osInit(uint8_t ms )
 {
 	OS_listInit();
-	ThreadCreate(idleTask , &idleTCB , idleStack , 4);
+	ThreadCreate(idleTask , &idleTCB , idleStack , PRIORITY_NUM - 1);
 	readyList[PRIORITY_NUM - 1].numOfItems = 0;
 	pRunning = &idleTCB.TCB_Item;
 	#if INCLUDE_SOFTWARETIMER == 1
