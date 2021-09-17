@@ -7,6 +7,6 @@
  #### *4 - Timer Support Techniques , such as :* <br>
     i)Task Delay .
     ii)Software Timers (Two modes , ONE_SHOT or CIRCULAR ) .
- #### *5 - mutex and Semaphores .* <br>
+ #### *5 - Semaphores .* <br>
  
  ![Example](https://github.com/AhmedAzazy-EZ/AVR-Multi-Tasking-OS/blob/main/Example/Screenshot_1.png)
